@@ -52,4 +52,19 @@ public class ConnectionUtil {
 		}
 	}
 
+	public static void close(Connection con, PreparedStatement preStatement) {
+		try {
+
+			if(preStatement != null) {
+				preStatement.close();
+			}
+			if(con != null) {
+				con.close();
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }

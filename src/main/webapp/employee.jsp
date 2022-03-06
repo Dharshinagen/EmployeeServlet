@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,14 +11,22 @@
 	margin-right: 370px;
 	font-size: 18px;
 }
+
 .cls {
 	border-radius: 3px;
 	padding: 5px 5px 5px 5px;
 	Background-color: transparent;
 }
-a{
-text-decoration:none;
+
+a {
+	text-decoration: none;
+	color:white;
 }
+
+.div1 {
+	padding-left: 460px;
+}
+
 .btn2 {
 	padding: 5px;
 	color: white;
@@ -29,8 +37,9 @@ text-decoration:none;
 }
 
 .btn3 {
-	margin-left: 160px;
+	margin-left: 90px;
 }
+
 body {
 	background-color: rgba(198, 208, 214, .9);
 }
@@ -49,60 +58,91 @@ th {
 </style>
 </head>
 <body>
-<h1>Employee Details</h1>
-      <form action ="EmployeeServ" method = "post">
-      <div class="t1">
-      <table>
-        <tr>
-          <th><label for="empname">Employee Name</label></th>
-          <td><input type="text" class="cls" id="empname" name="empname" value="" pattern="[A-Za-z]{5,}" required></td>
-        </tr>
-       
-        <tr> 
-          <th><label for="empcode">Employee Code</label></th>
-          <td> <input type="text" class="cls" name="empcode" id="empcode" required></td>
-        </tr>
-        <tr>
-         <th><label for="email">Email Address</label></th>
-         <td> <input type="email" class="cls"  name="email" id="email" required></td>
-        </tr>
-        <tr>
-          <th> <label for="address1">Address Line1</label></th>
-          <td> <input type="text" class="cls" name="address1" id="address1" required></td>
-         </tr>
-       <tr>
-         <th><label for="address2">Address Line2</label></th>
-         <td><input type="text" class="cls"  name="address2" id="address2" required></td>
-        </tr>
-        <tr>
-         <th> <label for="city">City</label></th>
-         <td><input type="text" class="cls" name="city" id="city" required></td>
-        </tr>
-        <tr>
-           <th><label for="state">State</label></th>
-           <td><input type="text" class="cls" name="state" id="state" required></td>
-        </tr>
-        <tr>
-           <th><label for="date">Date Of Birth</label></th>
-           <td><input type="date" class="cls" name="date" id="date" required></td>
-        </tr>
-        <tr>
-           <th> <label for="doj">Date Of Joining</label></th>
-           <td> <input type="date" class="cls" name="doj" id="doj" required></td>
-        </tr>
-       </table>
-       </div>
-       <div class="btn3">
-        <button class="btn3">Submit</button>
-        <button class="btn3"><a href="EmployeeList">Employee List</a></button>
-        <button class="btn3"><a href="searchList.jsp">Search</a></button>
-        </div>
-        <c:if test="${sessionScope.add!=null}">
-					<h4>${sessionScope.add}</h4>
-				</c:if>
+	<h1>Employee Details</h1>
+	<div class="div1">
+	<form action="EmployeeServ" method="post">
+		<div class="t1">
+			<table>
+				<tr>
+					<th><label for="empname">Employee Name</label></th>
+					<td><input type="text" class="cls" id="empname" name="empname"
+						value="" pattern="[A-Za-z]{5,}" placeholder="NAME" required></td>
+				</tr>
 
-				<c:remove var="add" scope="session" />
-  
-    </form>
+				<tr>
+					<th><label for="empcode">Employee Code</label></th>
+					<td><input type="text" class="cls" name="empcode" placeholder="EMPLOYEE CODE" id="empcode"
+						required></td>
+				</tr>
+				<tr>
+					<th><label for="email">Email Address</label></th>
+					<td><input type="email" class="cls" name="email" placeholder="EMAIL ID" id="email"
+						required></td>
+				</tr>
+				<tr>
+					<th><label for="address1">Address Line1</label></th>
+					<td><input type="text" class="cls" name="address1" placeholder="ADDRESS"
+						id="address1" required></td>
+				</tr>
+				<tr>
+					<th><label for="address2">Address Line2</label></th>
+					<td><input type="text" class="cls" name="address2" placeholder="ADDRESS"
+						id="address2" ></td>
+				</tr>
+				<tr>
+					<th><label for="city">City</label></th>
+					<td><input type="text" class="cls" name="city" id="city" placeholder="CITY"
+						required></td>
+				</tr>
+				<tr>
+					<th><label for="state">State</label></th>
+					<td><input type="text" class="cls" name="state" id="state" placeholder="STATE"
+						required></td>
+				</tr>
+				<tr>
+					<th><label for="date">Date Of Birth</label></th>
+					<td><input type="date" class="cls" name="date" id="date"
+						required></td>
+				</tr>
+				<tr>
+					<th><label for="doj">Date Of Joining</label></th>
+					<td><input type="date" class="cls" name="doj" id="doj"
+						required></td>
+				</tr>
+			</table><br>
+		</div>
+		<div class="btn3">
+			<button class="btn2">Submit</button>
+			<button class="btn2">
+				<a href="EmployeeList">Employee List</a>
+			</button>
+			<button class="btn2">
+				<a href="searchList.jsp">Search</a>
+			</button>
+		</div>
+		<c:if test="${sessionScope.add!=null}">
+			<h4>${sessionScope.add}</h4>
+		</c:if>
+
+		<c:remove var="add" scope="session" />
+
+	</form>
+	</div>
 </body>
+<script>
+function validuser() {
+let username = document.getElementById("empname").value;
+console.log(username);
+$
+.ajax({
+type : 'GET',
+url : 'AlertServlet',
+data : 'EmployeeCode=' + username,
+cache : false,
+success : function(response) {
+document.getElementById("userresponse").innerHTML = response;
+}
+});
+}
+</script>
 </html>

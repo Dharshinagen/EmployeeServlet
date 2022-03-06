@@ -43,7 +43,7 @@ public class EmployeeDetailsDao {
 	public List<EmployeeDetails> viewEmployeeDetail() throws SQLException {
 		List<EmployeeDetails> list = new ArrayList<>();
 
-		String query = "select  employee_name,employee_code,email,address1,address2,city,state,date_of_birth,joining_date from employee_details";
+		String query = "select  employee_name,employee_code,email,address1,address2,city,state,date_of_birth,joining_date from employee_details order by employee_code";
 		Connection con = null;
 		Statement statement = null;
 		ResultSet rs = null;
@@ -84,6 +84,7 @@ public class EmployeeDetailsDao {
 		ResultSet rs = null;
 		ResultSet reset = null;
 		LocalDate date = null;
+		LocalDate todaydate=null;
 		List<EmployeeDetails> list = new ArrayList<>();
 		String dateQuery = "select sysdate from dual";
 
@@ -126,6 +127,7 @@ public class EmployeeDetailsDao {
 //				toDate = date;
 //				System.out.println("to"+toDate);
 //			}
+			System.out.println("todate"+toDate);
 			if (fromDate != null && toDate != null) {
 
 				if (empCode.equals("") && (city.equals("")) && (state.equals(""))) {
@@ -137,12 +139,14 @@ public class EmployeeDetailsDao {
 							+ toDate + "'");
 				}
 			} else if (fromDate != null) {
-
+               System.out.println("elseif");
 				if (empCode.equals("") && (city.equals("")) && (state.equals(""))) {
 
-					query.append(" to_char(joining_date,'yyyy-mm-dd') =  " + "'" + fromDate + "'");
+					query.append(" to_char(joining_date,'yyyy-mm-dd') between " + "'" + fromDate + "' and '" + todaydate
+							+ "'");
 				} else {
-					query.append("and to_char(joining_date,'yyyy-mm-dd')=  " + "'" + fromDate + "'");
+					query.append("and to_char(joining_date,'yyyy-mm-dd') between  " + "'" + fromDate + "' and '" + todaydate
+							+ "'");
 				}
 			}
 
@@ -152,11 +156,16 @@ public class EmployeeDetailsDao {
 
 		try {
 			con = ConnectionUtil.getDbConnection();
-			prestatement = con.createStatement();
-			reset = prestatement.executeQuery(dateQuery);
-			if (reset.next()) {
-				date = reset.getDate("sysdate").toLocalDate();
-				// System.out.println("sasd"+date);
+		 	if (toDate ==null) {
+				prestatement = con.createStatement();
+				reset = prestatement.executeQuery(dateQuery);
+				if (reset.next()) {
+					date = reset.getDate("sysdate").toLocalDate();
+					System.out.println("sys"+date);
+
+			   	todaydate=date;
+			   	System.out.println("todate"+todaydate);
+				}
 			}
 			statement = con.createStatement();
 			rs = statement.executeQuery(sql);
@@ -178,6 +187,59 @@ public class EmployeeDetailsDao {
 			if (con != null)
 				con.close();
 
+		}
+		return list;
+	}
+
+	public int updateEmployeeDetail(EmployeeDetails employee) {
+		String updateQuery = "update employee_details set employee_name=?,email=?,address1=?,address2=?,city=?,state=?,date_of_birth=?,joining_date=? where employee_code=?";
+		int flag = 0;
+		Connection con = null;
+		PreparedStatement preStatement = null;
+		try {
+			con = ConnectionUtil.getDbConnection();
+			preStatement = con.prepareStatement(updateQuery);
+			preStatement.setString(1, employee.getEmployeeName());
+			preStatement.setString(2, employee.getEmail());
+			preStatement.setString(3, employee.getAddress1());
+			preStatement.setString(4, employee.getAddress2());
+			preStatement.setString(5, employee.getCity());
+			preStatement.setString(6, employee.getState());
+			preStatement.setDate(7, java.sql.Date.valueOf(employee.getDateOfBirth()));
+			preStatement.setDate(8, java.sql.Date.valueOf(employee.getJoiningDate()));
+			preStatement.setString(9, employee.getEmployeeCode());
+			preStatement.executeUpdate();
+			flag = 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtil.closeConnectionStatement(preStatement, con);
+		}
+		return flag;
+	}
+
+	public List<EmployeeDetails> getEmployeeDetails(String empcode) {
+		String query = "select employee_name,employee_code,email,address1,address2,city,state,date_of_birth,joining_date from employee_details where employee_code=?";
+		List<EmployeeDetails> list = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = ConnectionUtil.getDbConnection();
+			ps = con.prepareStatement(query);
+			ps.setString(1, empcode);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				EmployeeDetails empDetail = new EmployeeDetails(rs.getString("Employee_Name"),
+						rs.getString("employee_code"), rs.getString("email"), rs.getString("address1"),
+						rs.getString("address2"), rs.getString("city"), rs.getString("state"),
+						rs.getDate("date_of_birth").toLocalDate(), rs.getDate("joining_date").toLocalDate());
+				list.add(empDetail);
+
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
 		}
 		return list;
 	}
